@@ -137,6 +137,59 @@ def init_session_state():
 
 init_session_state()
 
+# -----------------------------
+# Simple Assignment Login
+# -----------------------------
+USERS = {
+    "Admin": {"password": "admin123", "role": "Admin"},
+    "User": {"password": "user123", "role": "User"},
+}
+
+def require_login():
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+    if "username" not in st.session_state:
+        st.session_state.username = None
+    if "user_role" not in st.session_state:
+        st.session_state.user_role = None
+
+    if st.session_state.authenticated:
+        return
+
+    st.markdown(
+        """
+        <div class="procure-header" style="max-width:650px; margin:70px auto 20px auto; text-align:center;">
+            <div class="procure-title">🛡 ProcureShield</div>
+            <div class="procure-subtitle">Procurement Integrity Investigation Portal</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    left, center, right = st.columns([1, 1.2, 1])
+    with center:
+        st.subheader("Sign in")
+        username = st.text_input("Username", key="login_username")
+        password = st.text_input("Password", type="password", key="login_password")
+        if st.button("Login", type="primary", use_container_width=True):
+            account = USERS.get(username)
+            if account and password == account["password"]:
+                st.session_state.authenticated = True
+                st.session_state.username = username
+                st.session_state.user_role = account["role"]
+                st.rerun()
+            else:
+                st.error("Invalid username or password.")
+        st.caption("Demo accounts: Admin | User")
+    st.stop()
+
+def logout():
+    st.session_state.authenticated = False
+    st.session_state.username = None
+    st.session_state.user_role = None
+    st.rerun()
+
+require_login()
+
 # Callback to reset AI insights if the user changes the dropdown selection
 def reset_ai_state():
     st.session_state.ai_insights_generated = False
@@ -552,6 +605,9 @@ def render_methodology():
 with st.sidebar:
     st.markdown("## 🛡 ProcureShield")
     st.caption("Procurement Integrity Investigation Portal")
+    st.caption(f"Signed in as: {st.session_state.username} ({st.session_state.user_role})")
+    if st.button("Logout", use_container_width=True):
+        logout()
 
     with st.expander("⚠️ Important Notice"):
         st.markdown(
