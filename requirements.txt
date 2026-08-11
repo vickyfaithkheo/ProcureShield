@@ -6,3 +6,11 @@ fuzzywuzzy
 pytz
 openpyxl
 scikit-learn
+PyMuPDF
+openai
+requests
+beautifulsoup4
+plotly
+python-docx
+scikit-learn
+numpypython-docx
