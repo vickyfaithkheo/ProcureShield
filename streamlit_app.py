@@ -141,8 +141,8 @@ init_session_state()
 # Simple Assignment Login
 # -----------------------------
 USERS = {
-    "Admin": {"password": "admin123", "role": "Admin"},
-    "User": {"password": "user123", "role": "User"},
+    "Admin": {"password": "@dmin123", "role": "Admin"},
+    "User": {"password": "Y$ser123", "role": "User"},
 }
 
 def require_login():
